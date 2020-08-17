@@ -30,7 +30,7 @@ const randomize = (seed) => {
 };
 
 const tokenize = (game, dictionary) => game.split('').map(
-  (char) => dictionary[char]
+  char => dictionary[char]
 ).join('');
 
 const getRandomDictionary = () => {
