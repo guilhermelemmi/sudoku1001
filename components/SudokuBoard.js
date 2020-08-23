@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import classNames from 'classnames';
 import styles from './SudokuBoard.module.css'
 
+let c = 0;
+
 function SudokuBoard(props) {
   const { initialBoard, solution } = props;
   const [board, setBoard] = useState(initialBoard);
@@ -18,8 +20,12 @@ function SudokuBoard(props) {
 
   const validateBoard = () => {
     console.log('validateBoard');
-    setErrors({1: null, 3: null});
-    // setTimeout(clearErrors, 5000);
+    const boardErrors = getBoardErrors();
+    if (boardErrors !== null) {
+      console.log('setErrors');
+      setErrors(boardErrors);
+      setTimeout(clearErrors, 5000);
+    }
   };
 
   const clearErrors = () => {
@@ -28,12 +34,20 @@ function SudokuBoard(props) {
     setErrors({});
   }
 
+  const getBoardErrors = () => {
+    if (c === 0) {
+      c++;
+      return {1: null, 3: null};
+    }
+    return null;
+  }
+
   const renderCells = () => board && Object.keys(board).map((cellIndex) => (
     <div
       key={`cell-${cellIndex}`}
       className={classNames(
         styles.cell,
-        {[styles.error]: typeof errors[cellIndex] != "undefined"}
+        {[styles.error]: typeof errors[cellIndex] !== "undefined"}
       )}
     >
       <input
@@ -41,7 +55,7 @@ function SudokuBoard(props) {
         pattern="\d*"
         noValidate=""
         id={`input-${cellIndex}`}
-        value={board[cellIndex]}
+        value={board[cellIndex] || ''}
         maxLength="1"
         onChange={() => onCellChange(cellIndex, board[cellIndex])}
       />
