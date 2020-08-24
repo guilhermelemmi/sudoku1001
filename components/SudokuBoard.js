@@ -35,11 +35,11 @@ function SudokuBoard(props) {
   }
 
   const getBoardErrors = () => {
-    if (c === 0) {
-      c++;
-      return {1: null, 3: null};
-    }
-    return null;
+    // if (c === 0) {
+    //   c++;
+    //   return {1: null, 3: null};
+    // }
+    // return null;
   }
 
   const renderCells = () => board && Object.keys(board).map((cellIndex) => (
