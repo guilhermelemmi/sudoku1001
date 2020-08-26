@@ -8,15 +8,21 @@ let c = 0;
 function SudokuBoard(props) {
   const { initialBoard, solution } = props;
   const [board, setBoard] = useState(initialBoard);
+  const [pendingInput, setPendingInput] = useState(null);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    validateBoard(board);
-  }, [board]);
+    validatePendingInput();
+  }, [pendingInput]);
 
   const onCellChange = (index, value) => {
-    setBoard({...board, [index]: value});
+    setPendingInput({[index]: value})
+    //setBoard({...board, [index]: value});
   };
+
+  const validatePendingInput = () => {
+    // TODO: implement pending input validation
+  }
 
   const validateBoard = () => {
     console.log('validateBoard');
