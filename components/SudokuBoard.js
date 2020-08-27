@@ -52,15 +52,19 @@ function SudokuBoard(props) {
         {[styles.error]: typeof errors[cellIndex] !== "undefined"}
       )}
     >
-      <input
-        type="text"
-        pattern="\d*"
-        noValidate=""
-        id={`input-${cellIndex}`}
-        value={board[cellIndex] || ''}
-        maxLength="1"
-        onChange={() => onCellChange(cellIndex, board[cellIndex])}
-      />
+      {
+        initialBoard[cellIndex] || (
+          <input
+            type="text"
+            pattern="\d*"
+            noValidate=""
+            id={`input-${cellIndex}`}
+            value={board[cellIndex] || ''}
+            maxLength="1"
+            onChange={() => onCellChange(cellIndex, board[cellIndex])}
+          />
+        )
+      }
     </div>
   ));
 
