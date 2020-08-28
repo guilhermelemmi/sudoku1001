@@ -1,19 +1,69 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import classNames from 'classnames';
-import styles from './SudokuBoard.module.css'
+
+import styles from './SudokuBoard.module.css';
 
 let c = 0;
 
 function SudokuBoard(props) {
   const { initialBoard, solution } = props;
+
+  const [focus, setFocus] = useState(0);
   const [board, setBoard] = useState(initialBoard);
   const [pendingInput, setPendingInput] = useState(null);
   const [errors, setErrors] = useState({});
 
+  const cellsRefs = Object.keys(initialBoard).map(i => useRef(null));
+
+  useEffect(() => {
+    if (cellsRefs && cellsRefs[focus] && cellsRefs[focus].focus) {
+      cellsRefs[focus].focus();
+    }
+
+    window.addEventListener("keydown", onKeydown);
+    return () => window.removeEventListener("keydown", onKeydown);
+  }, []);
+
+  useEffect(() => {
+    console.log(focus);
+    if (cellsRefs && cellsRefs[focus] && cellsRefs[focus].focus)
+      cellsRefs[focus].focus();
+  }, [focus]);
+
   useEffect(() => {
     validatePendingInput();
   }, [pendingInput]);
+
+  const navigate = (direction) => {
+    switch (direction) {
+      case 'left':
+        setFocus(focus - 1);
+        break;
+      case 'right':
+        setFocus(focus + 1);
+        break;
+    }
+  }
+
+  const onKeydown = (event) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        console.log('arrow down');
+        break;
+      case 'ArrowUp':
+        console.log('arrow up');
+        break;
+      case 'ArrowLeft':
+        console.log('arrow left');
+        navigate('left');
+        break;
+      case 'ArrowRight':
+        console.log('arrow right');
+        navigate('right');
+        break;
+    }
+  };
 
   const onCellChange = (index, value) => {
     setPendingInput({[index]: value})
@@ -55,6 +105,7 @@ function SudokuBoard(props) {
       {
         initialBoard[cellIndex] || (
           <input
+            ref={cellsRefs[cellIndex]}
             type="text"
             pattern="\d*"
             noValidate=""

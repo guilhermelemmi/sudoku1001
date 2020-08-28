@@ -2,16 +2,15 @@ import SudokuBoard from '../components/SudokuBoard';
 import { createGame } from '../util/sudokuUtil';
 
 const game = createGame(0);
-const initialBoard = game.board;
 const solution = game.solution;
-const board = game.board.split('')
+const initialBoard = game.board.split('')
   .map((cell) => cell === '0' ? null : cell)
   .reduce((acc, c, i) => ({...acc, [i]: c}), {});
 
 function HomePage() {
   return (
     <SudokuBoard
-      initialBoard={board}
+      initialBoard={initialBoard}
       solution={solution}
     />
   )
