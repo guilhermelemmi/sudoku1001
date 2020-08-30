@@ -49,10 +49,10 @@ function SudokuBoard(props) {
   const onKeydown = (event) => {
     switch (event.key) {
       case 'ArrowDown':
-        console.log('arrow down');
+        //console.log('arrow down');
         break;
       case 'ArrowUp':
-        console.log('arrow up');
+        //console.log('arrow up');
         break;
       case 'ArrowLeft':
         console.log('arrow left');
