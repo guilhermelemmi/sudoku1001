@@ -4,31 +4,42 @@ import classNames from 'classnames';
 
 import styles from './SudokuBoard.module.css';
 
-let c = 0;
+const FOCUS_DIRECTION = {
+  RIGHT: 'RIGHT',
+  LEFT: 'LEFT',
+  DOWN: 'DOWN',
+  UP: 'UP',
+};
+
+const DIRECTION_SHIFT = {
+  RIGHT: 1,
+  LEFT: -1,
+  DOWN: 9,
+  UP: -9,
+};
 
 function SudokuBoard(props) {
   const { initialBoard, solution } = props;
 
-  const [focus, setFocus] = useState(0);
   const [board, setBoard] = useState(initialBoard);
+  const [focus, setFocus] = useState(0);
+  const [focusDirection, setFocusDirection] = useState(FOCUS_DIRECTION.RIGHT);
   const [pendingInput, setPendingInput] = useState(null);
   const [errors, setErrors] = useState({});
 
-  const cellsRefs = Object.keys(initialBoard).map(i => useRef(null));
+  const cellsRefs = useRef([]);
 
   useEffect(() => {
-    // if (cellsRefs && cellsRefs[focus] && cellsRefs[focus].focus) {
-    //   cellsRefs[focus].focus();
-    // }
-
     window.addEventListener("keydown", onKeydown);
     return () => window.removeEventListener("keydown", onKeydown);
   }, []);
 
   useEffect(() => {
-    console.log(focus, (cellsRefs && cellsRefs[focus] && cellsRefs[focus].focus));
-    if (cellsRefs && cellsRefs[focus] && cellsRefs[focus].focus)
-      cellsRefs[focus].focus();
+    if (cellsRefs.current[focus]) {
+      cellsRefs.current[focus].focus();
+    } else {
+      setFocus(focus => focus + DIRECTION_SHIFT[focusDirection]);
+    }
   }, [focus]);
 
   useEffect(() => {
@@ -38,40 +49,23 @@ function SudokuBoard(props) {
   const onKeydown = useCallback(event => {
     switch (event.key) {
       case 'ArrowDown':
-        console.log('arrow down');
+        setFocusDirection(FOCUS_DIRECTION.DOWN);
+        setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.DOWN]);
         break;
       case 'ArrowUp':
-        console.log('arrow up');
+        setFocusDirection(FOCUS_DIRECTION.UP);
+        setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.UP]);
         break;
       case 'ArrowLeft':
-        console.log('arrow left');
-        setFocus(focus => focus - 1);
+        setFocusDirection(FOCUS_DIRECTION.LEFT);
+        setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.LEFT]);
         break;
       case 'ArrowRight':
-        console.log('arrow right');
-        setFocus(focus => focus + 1);
+        setFocusDirection(FOCUS_DIRECTION.RIGHT);
+        setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.RIGHT]);
         break;
     }
   }, []);
-
-  // const onKeydown = (event) => {
-  //   switch (event.key) {
-  //     case 'ArrowDown':
-  //       console.log('arrow down');
-  //       break;
-  //     case 'ArrowUp':
-  //       console.log('arrow up');
-  //       break;
-  //     case 'ArrowLeft':
-  //       console.log('arrow left');
-  //       navigate('left');
-  //       break;
-  //     case 'ArrowRight':
-  //       console.log('arrow right');
-  //       navigate('right');
-  //       break;
-  //   }
-  // };
 
   const onCellChange = (index, value) => {
     setPendingInput({[index]: value})
@@ -113,7 +107,7 @@ function SudokuBoard(props) {
       {
         initialBoard[cellIndex] || (
           <input
-            ref={cellsRefs[cellIndex]}
+            ref={ref => cellsRefs.current[cellIndex] = ref}
             type="text"
             pattern="\d*"
             noValidate=""
