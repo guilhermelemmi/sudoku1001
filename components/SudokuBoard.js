@@ -43,7 +43,8 @@ function SudokuBoard(props) {
   }, [focus]);
 
   useEffect(() => {
-    validatePendingInput();
+    if (pendingInput)
+      validatePendingInput();
   }, [pendingInput]);
 
   const onKeydown = useCallback(event => {
@@ -68,19 +69,18 @@ function SudokuBoard(props) {
   }, []);
 
   const onCellChange = (index, value) => {
-    setPendingInput({[index]: value})
-    //setBoard({...board, [index]: value});
+    setPendingInput({[index]: value});
   };
 
   const validatePendingInput = () => {
     // TODO: implement pending input validation
+    setBoard({...board, ...pendingInput});
+    setPendingInput(null);
   }
 
   const validateBoard = () => {
-    console.log('validateBoard');
     const boardErrors = getBoardErrors();
     if (boardErrors !== null) {
-      console.log('setErrors');
       setErrors(boardErrors);
       setTimeout(clearErrors, 5000);
     }
@@ -112,9 +112,9 @@ function SudokuBoard(props) {
             pattern="\d*"
             noValidate=""
             id={`input-${cellIndex}`}
-            value={board[cellIndex] || ''}
+            value={(pendingInput && pendingInput[focus]) || board[cellIndex] || ''}
             maxLength="1"
-            onChange={() => onCellChange(cellIndex, board[cellIndex])}
+            onChange={(event) => onCellChange(cellIndex, event.target.value)}
           />
         )
       }
