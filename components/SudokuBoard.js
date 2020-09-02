@@ -30,8 +30,8 @@ function SudokuBoard(props) {
   const cellsRefs = useRef([]);
 
   useEffect(() => {
-    window.addEventListener("keydown", onKeydown);
-    return () => window.removeEventListener("keydown", onKeydown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => window.removeEventListener("keyup", onKeyUp);
   }, []);
 
   useEffect(() => {
@@ -47,7 +47,8 @@ function SudokuBoard(props) {
       validatePendingInput();
   }, [pendingInput]);
 
-  const onKeydown = useCallback(event => {
+  const onKeyUp = (event) => {
+    console.log(event.key);
     switch (event.key) {
       case 'ArrowDown':
         setFocusDirection(FOCUS_DIRECTION.DOWN);
@@ -66,9 +67,10 @@ function SudokuBoard(props) {
         setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.RIGHT]);
         break;
     }
-  }, []);
+  };
 
   const onCellChange = (index, value) => {
+    console.log(index, value);
     setPendingInput({[index]: value});
   };
 
