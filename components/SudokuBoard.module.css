@@ -18,6 +18,10 @@
   font-size: 1.5em;
 }
 
+.pending {
+  background: orange;
+}
+
 .error {
   background: red;
 }

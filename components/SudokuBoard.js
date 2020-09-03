@@ -30,11 +30,6 @@ function SudokuBoard(props) {
   const cellsRefs = useRef([]);
 
   useEffect(() => {
-    window.addEventListener("keyup", onKeyUp);
-    return () => window.removeEventListener("keyup", onKeyUp);
-  }, []);
-
-  useEffect(() => {
     if (cellsRefs.current[focus]) {
       cellsRefs.current[focus].focus();
     } else {
@@ -69,12 +64,16 @@ function SudokuBoard(props) {
     }
   };
 
-  const onCellChange = (index, value) => {
-    console.log(index, value);
-    setPendingInput({[index]: value});
+  const onCellKeyDown = (index, event) => {
+    console.log(index, event.key);
+    if (!isNaN(event.key))
+      setPendingInput({[index]: event.key});
+    else
+      event.preventDefault();
   };
 
   const validatePendingInput = () => {
+    console.log('validatePendingInput');
     // TODO: implement pending input validation
     setBoard({...board, ...pendingInput});
     setPendingInput(null);
@@ -98,11 +97,22 @@ function SudokuBoard(props) {
     return null;
   }
 
+  const getInputValue = (index) => {
+    if (pendingInput && pendingInput[index]) {
+      console.log('pendingInput', pendingInput[index]);
+      return pendingInput[index];
+    } else {
+      console.log('NO pendingInput', board[index] || '');
+      return board[index] || '';
+    }
+  }
+//            maxLength="1"
   const renderCells = () => board && Object.keys(board).map((cellIndex) => (
     <div
       key={`cell-${cellIndex}`}
       className={classNames(
         styles.cell,
+        {[styles.pending]: pendingInput && typeof pendingInput[cellIndex] !== "undefined"},
         {[styles.error]: typeof errors[cellIndex] !== "undefined"}
       )}
     >
@@ -114,9 +124,8 @@ function SudokuBoard(props) {
             pattern="\d*"
             noValidate=""
             id={`input-${cellIndex}`}
-            value={(pendingInput && pendingInput[focus]) || board[cellIndex] || ''}
-            maxLength="1"
-            onChange={(event) => onCellChange(cellIndex, event.target.value)}
+            value={getInputValue(cellIndex)}
+            onKeyDown={e => onCellKeyDown(cellIndex, e)}
           />
         )
       }
@@ -124,7 +133,10 @@ function SudokuBoard(props) {
   ));
 
   return (
-    <div className={styles.board}>
+    <div
+      className={styles.board}
+      onKeyUp={onKeyUp}
+    >
      {renderCells()}
     </div>
   )
