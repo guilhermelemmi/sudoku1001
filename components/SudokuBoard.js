@@ -88,7 +88,6 @@ function SudokuBoard(props) {
   };
 
   const clearErrors = () => {
-    console.log('clearErrors');
     setBoard({...board, ...errors});
     setErrors({});
   }
