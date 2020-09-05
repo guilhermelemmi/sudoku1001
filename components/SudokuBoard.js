@@ -106,7 +106,7 @@ function SudokuBoard(props) {
       return board[index] || '';
     }
   }
-//            maxLength="1"
+
   const renderCells = () => board && Object.keys(board).map((cellIndex) => (
     <div
       key={`cell-${cellIndex}`}
