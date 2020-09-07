@@ -73,7 +73,6 @@ function SudokuBoard(props) {
   };
 
   const validatePendingInput = () => {
-    console.log('validatePendingInput');
     // TODO: implement pending input validation
     setBoard({...board, ...pendingInput});
     setPendingInput(null);
