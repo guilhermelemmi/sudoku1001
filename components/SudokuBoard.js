@@ -65,7 +65,6 @@ function SudokuBoard(props) {
   };
 
   const onCellKeyDown = (index, event) => {
-    console.log(index, event.key);
     if (!isNaN(event.key))
       setPendingInput({[index]: event.key});
     else
