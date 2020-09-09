@@ -99,7 +99,6 @@ function SudokuBoard(props) {
       console.log('pendingInput', pendingInput[index]);
       return pendingInput[index];
     } else {
-      console.log('NO pendingInput', board[index] || '');
       return board[index] || '';
     }
   }
