@@ -96,7 +96,7 @@ function SudokuBoard(props) {
 
   const getInputValue = (index) => {
     if (pendingInput && pendingInput[index]) {
-      console.log('pendingInput', pendingInput[index]);
+      //console.log('pendingInput', pendingInput[index]);
       return pendingInput[index];
     } else {
       return board[index] || '';
