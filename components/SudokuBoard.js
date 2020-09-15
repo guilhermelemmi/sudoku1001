@@ -43,7 +43,7 @@ function SudokuBoard(props) {
   }, [pendingInput]);
 
   const onKeyUp = (event) => {
-    console.log(event.key);
+    // console.log(event.key);
     switch (event.key) {
       case 'ArrowDown':
         setFocusDirection(FOCUS_DIRECTION.DOWN);
