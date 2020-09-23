@@ -70,6 +70,15 @@ function SudokuBoard(props) {
       event.preventDefault();
   };
 
+  const onCellFocus = (index, event) => {
+    console.log('onCellFocus1', index);
+    if (focus != index) {
+      console.log('onCellFocus2', index, typeof index);
+      setFocus(() => parseInt(index, 10));
+      event.preventDefault();
+    }
+  };
+
   const validatePendingInput = () => {
     // TODO: implement pending input validation
     setBoard({...board, ...pendingInput});
@@ -121,6 +130,7 @@ function SudokuBoard(props) {
             id={`input-${cellIndex}`}
             value={getInputValue(cellIndex)}
             onKeyDown={e => onCellKeyDown(cellIndex, e)}
+            onFocus={e => onCellFocus(cellIndex, e)}
           />
         )
       }
