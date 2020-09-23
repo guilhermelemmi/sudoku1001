@@ -31,10 +31,8 @@ function SudokuBoard(props) {
 
   useEffect(() => {
     if (cellsRefs.current[focus]) {
-      console.log('useEffect found focus', focus);
       cellsRefs.current[focus].focus();
     } else {
-      console.log('useEffect not found focus', focus);
       setFocus(focus => focus + DIRECTION_SHIFT[focusDirection]);
     }
   }, [focus]);
@@ -45,8 +43,6 @@ function SudokuBoard(props) {
   }, [pendingInput]);
 
   const onKeyUp = (event) => {
-    console.log('onKeyUp', event.key);
-    console.log('onKeyUp focus is', focus);
     let newFocusDirection = '';
 
     switch (event.key) {
@@ -70,7 +66,6 @@ function SudokuBoard(props) {
   };
 
   const onCellKeyDown = (index, event) => {
-    console.log('onCellKeyDown', index);
     if (!isNaN(event.key))
       setPendingInput({[index]: event.key});
     else
@@ -78,9 +73,7 @@ function SudokuBoard(props) {
   };
 
   const onCellFocus = (index, event) => {
-    console.log('onCellFocus1', index);
     if (focus != index) {
-      console.log('onCellFocus2', index, typeof index);
       setFocus(() => parseInt(index, 10));
       event.preventDefault();
     }
@@ -115,7 +108,6 @@ function SudokuBoard(props) {
 
   const getInputValue = (index) => {
     if (pendingInput && pendingInput[index]) {
-      //console.log('pendingInput', pendingInput[index]);
       return pendingInput[index];
     } else {
       return board[index] || '';
