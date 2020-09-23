@@ -31,8 +31,10 @@ function SudokuBoard(props) {
 
   useEffect(() => {
     if (cellsRefs.current[focus]) {
+      console.log('useEffect found focus', focus);
       cellsRefs.current[focus].focus();
     } else {
+      console.log('useEffect not found focus', focus);
       setFocus(focus => focus + DIRECTION_SHIFT[focusDirection]);
     }
   }, [focus]);
@@ -43,27 +45,32 @@ function SudokuBoard(props) {
   }, [pendingInput]);
 
   const onKeyUp = (event) => {
+    console.log('onKeyUp', event.key);
+    console.log('onKeyUp focus is', focus);
+    let newFocusDirection = '';
+
     switch (event.key) {
       case 'ArrowDown':
-        setFocusDirection(FOCUS_DIRECTION.DOWN);
-        setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.DOWN]);
+        newFocusDirection = FOCUS_DIRECTION.DOWN;
         break;
       case 'ArrowUp':
-        setFocusDirection(FOCUS_DIRECTION.UP);
-        setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.UP]);
+        newFocusDirection = FOCUS_DIRECTION.UP;
         break;
       case 'ArrowLeft':
-        setFocusDirection(FOCUS_DIRECTION.LEFT);
-        setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.LEFT]);
+        newFocusDirection = FOCUS_DIRECTION.LEFT;
         break;
       case 'ArrowRight':
-        setFocusDirection(FOCUS_DIRECTION.RIGHT);
-        setFocus(focus => focus + DIRECTION_SHIFT[FOCUS_DIRECTION.RIGHT]);
+        newFocusDirection = FOCUS_DIRECTION.RIGHT;
         break;
+    }
+    if (withinBoard(focus + DIRECTION_SHIFT[newFocusDirection])) {
+      setFocusDirection(newFocusDirection);
+      setFocus(focus => focus + DIRECTION_SHIFT[newFocusDirection]);
     }
   };
 
   const onCellKeyDown = (index, event) => {
+    console.log('onCellKeyDown', index);
     if (!isNaN(event.key))
       setPendingInput({[index]: event.key});
     else
@@ -78,6 +85,10 @@ function SudokuBoard(props) {
       event.preventDefault();
     }
   };
+
+  const withinBoard = (newFocus) => {
+    return newFocus >= 0 && newFocus < 81;
+  }
 
   const validatePendingInput = () => {
     // TODO: implement pending input validation
