@@ -127,6 +127,7 @@ function SudokuBoard(props) {
             type="text"
             pattern="\d*"
             noValidate=""
+            readOnly
             id={`input-${cellIndex}`}
             value={getInputValue(cellIndex)}
             onKeyDown={e => onCellKeyDown(cellIndex, e)}
